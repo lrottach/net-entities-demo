@@ -1,13 +1,12 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWorkerDefaults()
+    .ConfigureServices(services => services.AddHttpClient("AzureApiClient", configuration =>
+    {
+        configuration.BaseAddress = new Uri("https://management.azure.com/");
+    }))
     .Build();
-
-// Add http client to dependency injection
-host.Services.AddHttpClient("AzureApiClient", configuration =>
-        {
-            configuration.BaseAddress = new Uri("https://management.azure.com/");
-        });
 
 host.Run();
